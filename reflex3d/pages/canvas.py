@@ -1,18 +1,18 @@
 """The canvas page."""
 from reflex.style import Style
 
-from npc.components.three.cameras import OrthographicCamera
-from npc.components.three.canvas import Canvas
-from npc.components.three.controls import OrbitControls
-from npc.components.three.lights import PointLight, AmbientLight
-from npc.components.three.lines import EllipseCurve, CurveModifier
-from npc.components.three.loaders import GLTFLoader
-from npc.components.three.materials import MeshStandardMaterial
-from npc.components.three.mesh import Mesh, SphereGeometry
-from npc.components.three.stagings import Center
-from npc.components.three.text import Text3D
-from npc.states.three import ThreeState
-from npc.templates import template
+from reflex3d.components.three.cameras import OrthographicCamera
+from reflex3d.components.three.canvas import Canvas
+from reflex3d.components.three.controls import OrbitControls
+from reflex3d.components.three.lights import PointLight, AmbientLight
+from reflex3d.components.three.lines import EllipseCurve, CurveModifier
+from reflex3d.components.three.loaders import GLTFLoader
+from reflex3d.components.three.materials import MeshStandardMaterial
+from reflex3d.components.three.mesh import Mesh, SphereGeometry
+from reflex3d.components.three.stagings import Center
+from reflex3d.components.three.text import Text3D
+from reflex3d.states.three import ThreeState
+from reflex3d.templates import template
 
 import reflex as rx
 

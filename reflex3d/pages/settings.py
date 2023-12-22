@@ -1,6 +1,6 @@
 """The settings page."""
 
-from npc.templates import template
+from reflex3d.templates import template
 
 import reflex as rx
 

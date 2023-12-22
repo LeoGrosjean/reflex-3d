@@ -1,7 +1,7 @@
 """The home page of the app."""
 
-from npc import styles
-from npc.templates import template
+from reflex3d import styles
+from reflex3d.templates import template
 
 import reflex as rx
 
