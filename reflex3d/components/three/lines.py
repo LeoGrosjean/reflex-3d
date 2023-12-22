@@ -34,7 +34,7 @@ class CurveModifier (rx.Component):
     tag = "CurveModifier"
 
     radius: rx.Var[int | float]
-    curve: rx.Var[str] = "{catmullRomCurve}"
+    curve: rx.Var[rx.Component]
 
     def _get_custom_code(self) -> str | None:
         return f"""
@@ -54,3 +54,10 @@ const catmullRomCurve = new THREE.CatmullRomCurve3(points3D);
                 "react": {rx.vars.ImportVar(tag="useMemo")},
             }
         )
+
+
+class CatmullRomCurve(rx.Component):
+    tag = 'catmullRomCurve'
+
+    def render(self):
+        return "catmullRomCurve"

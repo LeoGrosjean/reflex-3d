@@ -5,7 +5,7 @@ from reflex3d.components.three.cameras import OrthographicCamera
 from reflex3d.components.three.canvas import Canvas
 from reflex3d.components.three.controls import OrbitControls
 from reflex3d.components.three.lights import PointLight, AmbientLight
-from reflex3d.components.three.lines import EllipseCurve, CurveModifier
+from reflex3d.components.three.lines import EllipseCurve, CurveModifier, CatmullRomCurve
 from reflex3d.components.three.loaders import GLTFLoader
 from reflex3d.components.three.materials import MeshStandardMaterial
 from reflex3d.components.three.mesh import Mesh, SphereGeometry
@@ -55,6 +55,10 @@ def canvas() -> rx.Component:
                     center(
                         text3d
                     ),
+                    curve=CatmullRomCurve.create()
+                ),
+                center(
+                    text3d
                 ),
                 EllipseCurve.create()
             ),

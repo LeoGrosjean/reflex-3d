@@ -1,7 +1,7 @@
 import reflex as rx
 from typing import Callable, Union, Any
 
-from npc.typings.three import Vector3, Euler, Quaternion, Matrix4
+from reflex3d.typings.three import Vector3, Euler, Quaternion, Matrix4
 
 
 class Center(rx.Component):
