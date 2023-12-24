@@ -17,6 +17,8 @@ class ThreeState(rx.State):
     urls: List[str] = ["/gltf/BoxAnimated.gltf", "/gltf/Poimandres.gltf", "https://vazxmixjsiawhamofees.supabase.co/storage/v1/object/public/models/low-poly-spaceship/model.gltf"]
     url: str = "/gltf/BoxAnimated.gltf"
 
+    center_trigger: str
+
     def increment(self, distance: MeshOnClick, intersections: MeshOnClick):
         print(distance)
         print(intersections)
@@ -24,12 +26,24 @@ class ThreeState(rx.State):
         print(self.count)
 
     @rx.var
+    def get_center_trigger(self) -> str:
+        return self.center_trigger
+
+    @rx.var
     def get_text(self) -> str:
         return self.text
+
+    def set_text(self, value: str):
+        self.set_center_trigger(value + self.font)
+        self.text = value
 
     @rx.var
     def get_font(self) -> str:
         return self.font
+
+    def set_font(self, value: str):
+        self.set_center_trigger(self.text + value)
+        self.font = value
 
     @rx.var
     def get_url(self) -> str:

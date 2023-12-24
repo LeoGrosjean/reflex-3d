@@ -5,12 +5,13 @@ from reflex3d.components.three.cameras import OrthographicCamera
 from reflex3d.components.three.canvas import Canvas
 from reflex3d.components.three.controls import OrbitControls
 from reflex3d.components.three.lights import PointLight, AmbientLight
-from reflex3d.components.three.lines import EllipseCurve, CurveModifier, CatmullRomCurve
+from reflex3d.components.three.lines import EllipseCurve, CurveModifier, CatmullRomCurve, CurveModifierV2
 from reflex3d.components.three.loaders import GLTFLoader
 from reflex3d.components.three.materials import MeshStandardMaterial
 from reflex3d.components.three.mesh import Mesh, SphereGeometry
 from reflex3d.components.three.stagings import Center
 from reflex3d.components.three.text import Text3D
+from reflex3d.javascript.onchange.text import HelloTest
 from reflex3d.states.three import ThreeState
 from reflex3d.templates import template
 
@@ -35,7 +36,7 @@ def canvas() -> rx.Component:
     text3d = Text3D.create(
         MeshStandardMaterial.create(color="blue"),
         ThreeState.get_text,
-        font=ThreeState.get_font
+        font=ThreeState.get_font,
     )
     center = Center.create
     ambient_light = AmbientLight.create()
@@ -51,14 +52,15 @@ def canvas() -> rx.Component:
                 point_light,
                 mesh,
                 gltf_mesh,
-                CurveModifier.create(
+                CurveModifierV2.create(
                     center(
-                        text3d
+                        text3d,
+                        cacheKey=ThreeState.get_center_trigger
                     ),
-                    curve=CatmullRomCurve.create()
                 ),
                 center(
-                    text3d
+                    text3d,
+                    cacheKey=ThreeState.get_center_trigger
                 ),
                 EllipseCurve.create()
             ),
@@ -78,11 +80,11 @@ def canvas() -> rx.Component:
         rx.select(
             ThreeState.fonts,
             on_change=ThreeState.set_font,
-            default_value=ThreeState.fonts[0],
+            # default_value=ThreeState.fonts[0],
         ),
         rx.select(
             ThreeState.urls,
             on_change=ThreeState.set_url,
-            default_value=ThreeState.urls[0],
+            # default_value=ThreeState.urls[0],
         )
     )
