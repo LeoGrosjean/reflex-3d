@@ -9,7 +9,7 @@ class ThreeState(rx.State):
     clicked: bool
     count: int = 0
 
-    text: str = "Lt. Testimus le Grand"
+    text: str = "Edit me !"
 
     fonts: List[str] = ["/fonts/Inter_Bold.json", "/fonts/Roboto_Regular.json", "/fonts/Android_Android.json"]
     font: str = "/fonts/Inter_Bold.json"
@@ -19,11 +19,26 @@ class ThreeState(rx.State):
 
     center_trigger: str
 
+    distance: float
+
+    intersections: List = ["Not clicked yet"]
+
     def increment(self, distance: MeshOnClick, intersections: MeshOnClick):
-        print(distance)
-        print(intersections)
+        self.distance = distance
+        self.intersections = intersections
         self.count += 1
-        print(self.count)
+
+    @rx.var
+    def get_distance(self) -> str:
+        return self.distance
+
+    @rx.var
+    def get_intersections(self) -> str:
+        return str(self.intersections[0])
+
+    @rx.var
+    def get_count(self) -> str:
+        return self.count
 
     @rx.var
     def get_center_trigger(self) -> str:

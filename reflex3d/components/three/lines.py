@@ -81,7 +81,7 @@ import * as THREE from 'three';
 const ellipseCurve = new THREE.EllipseCurve(0, 0, 2, 2, 0, 2 * Math.PI, false, Math.PI /2);
 const points2D = ellipseCurve.getPoints(10);
 
-const points3D = points2D.map(p => new THREE.Vector3(p.x, 0, p.y));
+const points3D = points2D.map(p => new THREE.Vector3(p.y, 0, -p.x));
 
 const catmullRomCurve = new THREE.CatmullRomCurve3(points3D);
 """

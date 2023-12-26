@@ -19,10 +19,7 @@ def sidebar_header() -> rx.Component:
         # ),
         rx.vstack(
             rx.text(
-                "NAMEPLATE",
-            ),
-            rx.text(
-                "CREATOR"
+                "Reflex Sandbox",
             ),
         ),
         rx.spacer(),
