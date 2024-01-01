@@ -83,5 +83,4 @@ class ThreeState(rx.State):
 
     @rx.var
     def get_transpose_x(self) -> float:
-        print(self.transpose_x)
         return self.transpose_x

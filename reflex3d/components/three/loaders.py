@@ -15,6 +15,7 @@ class GLTFLoader(rx.Component):
         return f"""
     function LoaderGltf({{url}}) {{
         const gltf = useGLTF(url)
+        window['scene'] = gltf.scene
         return (
             <primitive object={{gltf.scene}} children-0-castShadow />
         )

@@ -137,17 +137,13 @@ def canvas() -> rx.Component:
         rx.heading('Curve Text based on Ellipse'),
 
         partial_canvas(
-            CurveModifierV2.create(
-                text3d,
-            ),
-
+            gltf_mesh,
             CurvedText.create(
                 text=ThreeState.get_text,
                 font=ThreeState.get_font,
                 radius=ThreeState.get_radius,
                 transpose_x=ThreeState.get_transpose_x,
             ),
-            EllipseCurve.create()
         ),
         rx.vstack(
             rx.number_input(

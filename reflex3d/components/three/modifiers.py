@@ -68,7 +68,7 @@ function CurvedText({text, font, curve, radius, transposeX}) {
         }
     }, [transposeX]);
     return (
-        <>
+        <><Suspense>
             <group rotation={[0, 0, 0]} position={[0, 0, 0]}>
                 <CurveModifier curve={catmullRomCurve2}>
                     <Text3D ref={textRef} font={font} rotation={[0, 0, 0]} position={[0, 0, 0]} osef={transposeX}>
@@ -77,7 +77,7 @@ function CurvedText({text, font, curve, radius, transposeX}) {
                     </Text3D>
                 </CurveModifier>
             </group>
-        </>
+        </Suspense></>
     );
 }
 """
@@ -87,7 +87,9 @@ function CurvedText({text, font, curve, radius, transposeX}) {
             super()._get_imports() | {
                 "react": {
                     rx.vars.ImportVar(tag="useState"),
-                    rx.vars.ImportVar(tag="useEffect")
+                    rx.vars.ImportVar(tag="useEffect"),
+                    rx.vars.ImportVar(tag="useRef"),
+                    rx.vars.ImportVar(tag="Suspense")
                 },
                 "@react-three/drei": {
                     rx.vars.ImportVar(tag="Text3D"),
