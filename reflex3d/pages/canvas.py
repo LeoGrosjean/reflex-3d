@@ -1,5 +1,6 @@
 """The canvas page."""
 from functools import partial
+from math import pi
 
 from reflex.style import Style
 
@@ -11,6 +12,7 @@ from reflex3d.components.three.lines import EllipseCurve, CurveModifier, Catmull
 from reflex3d.components.three.loaders import GLTFLoader
 from reflex3d.components.three.materials import MeshStandardMaterial
 from reflex3d.components.three.mesh import Mesh, SphereGeometry
+from reflex3d.components.three.modifiers import CurvedText
 from reflex3d.components.three.stagings import Center
 from reflex3d.components.three.text import Text3D
 from reflex3d.javascript.onchange.text import HelloTest
@@ -59,6 +61,7 @@ def canvas() -> rx.Component:
         MeshStandardMaterial.create(color="Aqua"),
         ThreeState.get_text,
         font=ThreeState.get_font,
+        rotateY={'angle': pi},
     )
 
     gltf_mesh = GLTFLoader.create(url=ThreeState.get_url)
@@ -98,44 +101,68 @@ def canvas() -> rx.Component:
         ),
         rx.spacer(),
         rx.heading('Load dynamic gltf'),
-        rx.hstack(
-            rx.select(
-                ThreeState.urls,
-                on_change=ThreeState.set_url,
-                name="Select Gltf"
-                # default_value=ThreeState.urls[0],
-            ),
-            partial_canvas(
-                gltf_mesh,
-            ),
+
+        partial_canvas(
+            gltf_mesh,
         ),
+        rx.select(
+            ThreeState.urls,
+            on_change=ThreeState.set_url,
+            name="Select Gltf"
+            # default_value=ThreeState.urls[0],
+        ),
+
         rx.spacer(),
         rx.heading('Edit Text and Font with dynamic recenter'),
-        rx.hstack(
-            rx.vstack(
-                rx.input(
-                    on_change=ThreeState.set_text,
-                    placeholder=ThreeState.get_text,
-                ),
-                rx.select(
-                    ThreeState.fonts,
-                    on_change=ThreeState.set_font,
-                    # default_value=ThreeState.fonts[0],
-                ),
+
+        partial_canvas(
+            center(
+                text3d,
+                cacheKey=ThreeState.get_center_trigger
             ),
-            partial_canvas(
-                center(
-                    text3d,
-                    cacheKey=ThreeState.get_center_trigger
-                ),
+        ),
+        rx.vstack(
+            rx.input(
+                on_change=ThreeState.set_text,
+                placeholder=ThreeState.get_text,
             ),
+            rx.select(
+                ThreeState.fonts,
+                on_change=ThreeState.set_font,
+                # default_value=ThreeState.fonts[0],
+            ),
+
         ),
         rx.spacer(),
         rx.heading('Curve Text based on Ellipse'),
+
         partial_canvas(
             CurveModifierV2.create(
                 text3d,
             ),
+
+            CurvedText.create(
+                text=ThreeState.get_text,
+                font=ThreeState.get_font,
+                radius=ThreeState.get_radius,
+                transpose_x=ThreeState.get_transpose_x,
+            ),
             EllipseCurve.create()
         ),
+        rx.vstack(
+            rx.number_input(
+                on_change=ThreeState.set_radius,
+                default_value=ThreeState.radius
+                # default_value=ThreeState.fonts[0],
+            ),
+            rx.slider(
+                on_change=ThreeState.set_transpose_x,
+                default_value=ThreeState.transpose_x,
+                type_="range",
+                min_=-10,
+                max_=10,
+                step=0.2,
+            ),
+        ),
+
     )

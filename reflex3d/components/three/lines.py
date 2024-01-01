@@ -63,14 +63,19 @@ class CatmullRomCurve(rx.Component):
         return "catmullRomCurve"
 
 
-class CurveModifierV2 (rx.Component):
+class CurveModifierV2(rx.Component):
     library = "@react-three/drei"
     tag = "CurveModifier"
 
     radius: rx.Var[int | float]
     curve: rx.Var[rx.Component]
+    onUpdate: rx.Var[rx.Component]
 
     def _get_custom_code(self) -> str | None:
+        self.onUpdate = rx.Var.create(
+            "self => self.applyMatrix4(rotationMatrix)",
+            _var_is_local=False,
+        )
         self.curve = rx.Var.create(
             "catmullRomCurve",
             _var_is_local=False,
@@ -80,8 +85,9 @@ import * as THREE from 'three';
 
 const ellipseCurve = new THREE.EllipseCurve(0, 0, 2, 2, 0, 2 * Math.PI, false, Math.PI /2);
 const points2D = ellipseCurve.getPoints(10);
-
-const points3D = points2D.map(p => new THREE.Vector3(p.y, 0, -p.x));
+const angle = Math.PI; // 180 degrees in radians
+const rotationMatrix = new THREE.Matrix4().makeRotationX(angle);
+const points3D = points2D.map(p => new THREE.Vector3(p.x, 0, p.y));
 
 const catmullRomCurve = new THREE.CatmullRomCurve3(points3D);
 """
@@ -92,3 +98,29 @@ const catmullRomCurve = new THREE.CatmullRomCurve3(points3D);
                 "react": {rx.vars.ImportVar(tag="useMemo")},
             }
         )
+"""
+import React, { useState, useEffect } from 'react';
+import { Canvas } from '@react-three/fiber';
+import { Text3D, CurveModifier } from '@react-three/drei';
+import * as THREE from 'three';
+
+function CurvedText({ text, font, curve, ...props }) {
+  const [mesh, setMesh] = useState();
+
+  useEffect(() => {
+    // Update the mesh when text or font changes
+    setMesh(
+      <Text3D font={font} {...props}>
+        {text}
+      </Text3D>
+    );
+  }, [text, font, props]);
+
+  return (
+    <CurveModifier curve={curve}>
+      {mesh}
+    </CurveModifier>
+  );
+}
+
+"""

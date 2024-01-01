@@ -43,3 +43,5 @@ class Text3D(rx.Component):
     onClick: rx.Var[Callable]  # Function to call on text click
     onPointerOver: rx.Var[Callable]  # Function to call when a pointer hovers over the text
     onPointerOut: rx.Var[Callable]  # Function to call when a pointer leaves the text
+
+    rotateY: rx.Var[dict]
