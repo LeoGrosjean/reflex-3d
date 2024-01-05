@@ -13,12 +13,13 @@ class CurvedText(rx.Component):
     text: rx.Var[str]
     font: rx.Var[str]
     transpose_x: rx.Var[int | float]
+    transpose_y: rx.Var[int | float]
     size: rx.Var[int | float]
     height: rx.Var[int | float]
 
     def _get_custom_code(self) -> str | None:
         return """
-function CurvedText({text, font, size, curve, radius, transposeX, height}) {
+function CurvedText({text, font, size, curve, radius, transposeX, transposeY, height}) {
     const ellipseCurve_ = new EllipseCurve(0, 0, radius, radius, 0, 2 * Math.PI, false, 0);
     const points2D_ = ellipseCurve_.getPoints(1000);
     const points3D_ = points2D_.map(p => new Vector3(p.x, 0, p.y));
@@ -35,6 +36,7 @@ function CurvedText({text, font, size, curve, radius, transposeX, height}) {
     const [currentText, setCurrentText] = useState(text);
     const [currentFont, setCurrentFont] = useState(font);
     const [currentTransposeX, setCurrentTransposeX] = useState(transposeX);
+    const [currentTransposeY, setCurrentTransposeY] = useState(transposeY);
 
     const textRef = useRef();
 
@@ -47,8 +49,8 @@ function CurvedText({text, font, size, curve, radius, transposeX, height}) {
                 const boundingBox = new Box3().setFromObject(textRef.current);
 
                 const translation = new Matrix4().makeTranslation(
-                    (-boundingBox.max.x / 2) + transposeX,
-                    (-boundingBox.max.y / 2) + 2.6,
+                    (-boundingBox.max.x / 2) + currentTransposeX,
+                    (-boundingBox.max.y / 2) + 2.6 + currentTransposeY,
                     0
                 );
                 matrix.multiply(translation)
@@ -59,20 +61,26 @@ function CurvedText({text, font, size, curve, radius, transposeX, height}) {
                 rotationX = new Matrix4().makeRotationX(MathUtils.degToRad(0));
 
                 setCurrentTransposeX(transposeX)
+                setCurrentTransposeY(transposeY)
             }
         } else {
             isMounted.current = true;
         }
 
-    }, [textRef.current, text, font, size]);
+    }, [textRef.current, text, font, size, height]);
 
     useEffect(() => {
         if (textRef.current) {
-            let translation_x = new Matrix4().makeTranslation(-transposeX + currentTransposeX, 0, 0);
-            textRef.current.geometry.applyMatrix4(translation_x)
+            let translation_ = new Matrix4().makeTranslation(
+                -transposeX + currentTransposeX,
+                -transposeY + currentTransposeY,
+                0
+            );
+            textRef.current.geometry.applyMatrix4(translation_)
             setCurrentTransposeX(transposeX)
+            setCurrentTransposeY(transposeY)
         }
-    }, [transposeX]);
+    }, [transposeX, transposeY]);
     return (
         <><Suspense>
             <group rotation={[0, 0, 0]} position={[0, 0, 0]}>
@@ -123,6 +131,7 @@ function CurvedText({text, font, size, curve, radius, transposeX, height}) {
                 "font": self.font,
                 "radius": self.radius,
                 "transposeX": self.transpose_x,
+                "transposeY": self.transpose_y,
                 "size": self.size,
                 "height": self.height,
             }

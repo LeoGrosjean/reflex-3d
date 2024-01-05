@@ -8,6 +8,11 @@ import trimesh
 MESH_1 = trimesh.load("reflex3d/mesh/base/base_1.stl")
 MESH_2 = trimesh.load("reflex3d/mesh/props/sphere_top_bottom.stl")
 
+di = {
+    "choix 1": MESH_1,
+    "choix 2": MESH_2,
+}
+
 
 def init_mesh():
     mesh = MESH_1.copy()
@@ -47,6 +52,7 @@ class NpcState(rx.State):
     radius: float = 20.476
 
     transpose_x: float = 0.
+    transpose_y: float = 0.
 
     height: float = 1.1
 
@@ -86,15 +92,35 @@ class NpcState(rx.State):
     def get_transpose_x(self) -> float:
         return self.transpose_x
 
+    @rx.var
+    def get_transpose_y(self) -> float:
+        return self.transpose_y
+
     stream_content: str = init_mesh()
 
     @rx.cached_var
     def get_stream_content(self) -> str:
         return self.stream_content
 
+
+    meshes: List[str] = list(di.keys())
+    meshe: str = "choix 1"
+
+    @rx.var
+    def get_mesh(self) -> str:
+        return self.meshe
+
+    def set_mesh(self, value: str):
+        print(value)
+        self.meshe = value
+        self.stream_content = self.generate_mesh()
+
     def generate_mesh(self):
-        mesh = MESH_1.copy()
-        mesh += MESH_2.copy()
+        print(f"ici {self.meshe}")
+        mesh = di.get(self.meshe).copy()
+        print(mesh.metadata.get('file_name'))
+        #mesh = MESH_1.copy()
+        #mesh += MESH_2.copy()
         angle_x = np.radians(90)  # 30 degrees rotation around X-axis
         angle_y = np.radians(-180)  # 45 degrees rotation around Y-axis
         # Create rotation matrices

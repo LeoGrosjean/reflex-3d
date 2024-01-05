@@ -55,6 +55,11 @@ def nameplate() -> rx.Component:
 
     return rx.vstack(
         rx.vstack(
+            rx.select(
+                NpcState.meshes,
+                on_change=NpcState.set_mesh,
+                # default_value=ThreeState.fonts[0],
+            ),
             rx.input(
                 on_change=NpcState.set_text,
                 placeholder=NpcState.get_text,
@@ -74,6 +79,7 @@ def nameplate() -> rx.Component:
                 size=NpcState.get_font_size,
                 radius=NpcState.get_radius,
                 transpose_x=NpcState.get_transpose_x,
+                transpose_y=NpcState.get_transpose_y,
                 height=NpcState.get_height
             ),
         ),
@@ -81,24 +87,33 @@ def nameplate() -> rx.Component:
             numberinputimproved(
                 name="font height",
                 on_change=NpcState.set_height,
-                default_value=NpcState.height,
+                value=NpcState.height,
                 step=0.1
                 # default_value=NpcState.fonts[0],
             ),
             numberinputimproved(
                 name="font size",
                 on_change=NpcState.set_font_size,
-                default_value=NpcState.font_size,
+                value=NpcState.font_size,
                 step=0.1
                 # default_value=NpcState.fonts[0],
             ),
             numberinputimproved(
                 name="move middle text left right",
                 on_change=NpcState.set_transpose_x,
-                default_value=NpcState.transpose_x,
+                value=NpcState.transpose_x,
                 type_="range",
                 min_=-15,
                 max_=15,
+                step=0.1,
+            ),
+            numberinputimproved(
+                name="move middle text left right",
+                on_change=NpcState.set_transpose_y,
+                value=NpcState.transpose_y,
+                type_="range",
+                min_=-2,
+                max_=2,
                 step=0.1,
             ),
         ),
