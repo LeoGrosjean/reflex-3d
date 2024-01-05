@@ -9,23 +9,25 @@ class CurvedText(rx.Component):
     library = "@react-three/drei"
     tag = "CurvedText"
 
-    radius: rx.Var[int | float] = 5
+    radius: rx.Var[int | float]
     text: rx.Var[str]
     font: rx.Var[str]
-    transpose_x: rx.Var[int | float] = 0
+    transpose_x: rx.Var[int | float]
+    size: rx.Var[int | float]
+    height: rx.Var[int | float]
 
     def _get_custom_code(self) -> str | None:
         return """
-function CurvedText({text, font, curve, radius, transposeX}) {
-    const ellipseCurve_ = new EllipseCurve(0, 0, radius, radius, 0, 2 * Math.PI, false, (1 / 4) * Math.PI);
-    const points2D_ = ellipseCurve_.getPoints(40);
+function CurvedText({text, font, size, curve, radius, transposeX, height}) {
+    const ellipseCurve_ = new EllipseCurve(0, 0, radius, radius, 0, 2 * Math.PI, false, 0);
+    const points2D_ = ellipseCurve_.getPoints(1000);
     const points3D_ = points2D_.map(p => new Vector3(p.x, 0, p.y));
 
     const catmullRomCurve2 = new CatmullRomCurve3(points3D_);
 
     const matrix = new Matrix4();
     let rotationZ = new Matrix4().makeRotationZ(MathUtils.degToRad(180));
-    let rotationX = new Matrix4().makeRotationX(MathUtils.degToRad(-10));
+    let rotationX = new Matrix4().makeRotationX(MathUtils.degToRad(-14));
 
     matrix.multiply(rotationZ)
     matrix.multiply(rotationX)
@@ -44,7 +46,11 @@ function CurvedText({text, font, curve, radius, transposeX}) {
                 console.log(transposeX, currentTransposeX)
                 const boundingBox = new Box3().setFromObject(textRef.current);
 
-                const translation = new Matrix4().makeTranslation((-boundingBox.max.x / 2) + transposeX, 0, 0);
+                const translation = new Matrix4().makeTranslation(
+                    (-boundingBox.max.x / 2) + transposeX,
+                    (-boundingBox.max.y / 2) + 2.6,
+                    0
+                );
                 matrix.multiply(translation)
 
                 textRef.current.geometry.applyMatrix4(matrix)
@@ -58,7 +64,7 @@ function CurvedText({text, font, curve, radius, transposeX}) {
             isMounted.current = true;
         }
 
-    }, [textRef.current, text, font]);
+    }, [textRef.current, text, font, size]);
 
     useEffect(() => {
         if (textRef.current) {
@@ -71,7 +77,7 @@ function CurvedText({text, font, curve, radius, transposeX}) {
         <><Suspense>
             <group rotation={[0, 0, 0]} position={[0, 0, 0]}>
                 <CurveModifier curve={catmullRomCurve2}>
-                    <Text3D ref={textRef} font={font} rotation={[0, 0, 0]} position={[0, 0, 0]} osef={transposeX}>
+                    <Text3D ref={textRef} font={font} size={size} height={height}>
                         {text}
                         <meshStandardMaterial color={`lightgrey`}/>
                     </Text3D>
@@ -116,6 +122,8 @@ function CurvedText({text, font, curve, radius, transposeX}) {
                 "text": self.text,
                 "font": self.font,
                 "radius": self.radius,
-                "transposeX": self.transpose_x
+                "transposeX": self.transpose_x,
+                "size": self.size,
+                "height": self.height,
             }
         )

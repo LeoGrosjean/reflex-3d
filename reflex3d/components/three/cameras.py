@@ -27,3 +27,4 @@ class OrthographicCamera(rx.Component):
     # Event handlers
     onClick: rx.Var[Callable]  # Function to call on camera click
     onPointerMove: rx.Var[Callable]  # Function to call on pointer move over the camera
+

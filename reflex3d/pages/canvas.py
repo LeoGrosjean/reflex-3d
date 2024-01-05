@@ -9,7 +9,7 @@ from reflex3d.components.three.canvas import Canvas
 from reflex3d.components.three.controls import OrbitControls
 from reflex3d.components.three.lights import PointLight, AmbientLight
 from reflex3d.components.three.lines import EllipseCurve, CurveModifier, CatmullRomCurve, CurveModifierV2
-from reflex3d.components.three.loaders import GLTFLoader
+from reflex3d.components.three.loaders import GLTFLoader, UseGLTF
 from reflex3d.components.three.materials import MeshStandardMaterial
 from reflex3d.components.three.mesh import Mesh, SphereGeometry
 from reflex3d.components.three.modifiers import CurvedText
@@ -64,7 +64,8 @@ def canvas() -> rx.Component:
         rotateY={'angle': pi},
     )
 
-    gltf_mesh = GLTFLoader.create(url=ThreeState.get_url)
+    gltf_mesh = GLTFLoader.create(url=ThreeState.get_url2)
+    gltf_mesh2 = GLTFLoader.create(url=ThreeState.get_url)
 
     return rx.vstack(
         rx.heading("Render a sphere mesh with point light"),
@@ -103,7 +104,7 @@ def canvas() -> rx.Component:
         rx.heading('Load dynamic gltf'),
 
         partial_canvas(
-            gltf_mesh,
+            gltf_mesh2,
         ),
         rx.select(
             ThreeState.urls,
@@ -141,6 +142,7 @@ def canvas() -> rx.Component:
             CurvedText.create(
                 text=ThreeState.get_text,
                 font=ThreeState.get_font,
+                size=ThreeState.get_font_size,
                 radius=ThreeState.get_radius,
                 transpose_x=ThreeState.get_transpose_x,
             ),
@@ -151,14 +153,23 @@ def canvas() -> rx.Component:
                 default_value=ThreeState.radius
                 # default_value=ThreeState.fonts[0],
             ),
+            rx.number_input(
+                on_change=ThreeState.set_font_size,
+                default_value=ThreeState.font_size
+                # default_value=ThreeState.fonts[0],
+            ),
+            rx.number_input(
+                on_change=ThreeState.set_font_size,
+                default_value=ThreeState.font_size
+                # default_value=ThreeState.fonts[0],
+            ),
             rx.slider(
                 on_change=ThreeState.set_transpose_x,
                 default_value=ThreeState.transpose_x,
                 type_="range",
-                min_=-10,
-                max_=10,
+                min_=-100,
+                max_=100,
                 step=0.2,
             ),
         ),
-
     )

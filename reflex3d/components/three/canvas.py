@@ -33,3 +33,6 @@ class Canvas(rx.Component):
     # Event handlers
     onClick: rx.Var[Callable]  # Function to call on canvas click
     onPointerMove: rx.Var[Callable]  # Function to call on pointer move over the canvas
+
+    orthographic: rx.Var[bool]
+    camera: rx.Var[dict]
