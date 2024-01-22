@@ -4,6 +4,7 @@ from functools import partial
 from reflex.style import Style
 
 from reflex3d.components.chakra.inputs import numberinputimproved
+from reflex3d.components.download import StreamFile
 from reflex3d.components.three.cameras import OrthographicCamera
 from reflex3d.components.three.canvas import Canvas
 from reflex3d.components.three.controls import OrbitControls
@@ -55,6 +56,14 @@ def nameplate() -> rx.Component:
 
     return rx.vstack(
         rx.vstack(
+            rx.heading(NpcState.option),
+            rx.select(
+                NpcState.options,
+                placeholder="Select props",
+                is_multi=True,
+                on_change=NpcState.set_option,
+                close_menu_on_select=False,
+            ),
             rx.select(
                 NpcState.meshes,
                 on_change=NpcState.set_mesh,
@@ -62,7 +71,7 @@ def nameplate() -> rx.Component:
             ),
             rx.input(
                 on_change=NpcState.set_text,
-                placeholder=NpcState.get_text,
+                value=NpcState.get_text,
             ),
             rx.select(
                 NpcState.fonts,
@@ -115,6 +124,14 @@ def nameplate() -> rx.Component:
                 min_=-2,
                 max_=2,
                 step=0.1,
+            ),
+            rx.button(
+                "Generate DL",
+                on_click=NpcState.generate_and_download_file,
+            ),
+            StreamFile.create(
+                "StreamFile",
+                bytes_=NpcState.get_stream_content_dl,
             ),
         ),
     )

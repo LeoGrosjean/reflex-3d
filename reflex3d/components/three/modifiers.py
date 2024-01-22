@@ -20,7 +20,7 @@ class CurvedText(rx.Component):
     def _get_custom_code(self) -> str | None:
         return """
 function CurvedText({text, font, size, curve, radius, transposeX, transposeY, height}) {
-    const ellipseCurve_ = new EllipseCurve(0, 0, radius, radius, 0, 2 * Math.PI, false, 0);
+    const ellipseCurve_ = new EllipseCurve(0, 0, radius, radius, 0, 2 * Math.PI, false, Math.PI / 8.5);
     const points2D_ = ellipseCurve_.getPoints(1000);
     const points3D_ = points2D_.map(p => new Vector3(p.x, 0, p.y));
 
@@ -50,7 +50,7 @@ function CurvedText({text, font, size, curve, radius, transposeX, transposeY, he
 
                 const translation = new Matrix4().makeTranslation(
                     (-boundingBox.max.x / 2) + currentTransposeX,
-                    (-boundingBox.max.y / 2) + 2.6 + currentTransposeY,
+                    (-boundingBox.max.y / 2) + 2.9 + currentTransposeY,
                     0
                 );
                 matrix.multiply(translation)
